@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Museum of Our Love — Private Tour</title>
+  <link rel="stylesheet" href="style.css?v=final-2"/>
+</head>
+
+<body>
+  <!-- Background layers -->
+  <div class="bg base"></div>
+  <div class="bg aurora"></div>
+  <div class="bg vignette"></div>
+  <div class="bg grain"></div>
+
+  <!-- Fireworks canvas -->
+  <canvas id="fireworks"></canvas>
+
+  <!-- HUD -->
+  <header class="hud">
+    <div class="hud-left">
+      <div class="mark">✦</div>
+      <div class="hud-txt">
+        <div class="hud-title">Museum of Our Love</div>
+        <div class="hud-sub" id="hudSub">Private Tour • Year 1 → Year 5</div>
+      </div>
+    </div>
+    <div class="hud-right">
+      <button class="chip" id="helpBtn" type="button">?</button>
+    </div>
+  </header>
+
+  <!-- DOCENT CAPTION -->
+  <div class="docent" id="docent" aria-hidden="true">
+    <div class="docent-pill">
+      <div class="docent-dot"></div>
+      <div class="docent-text" id="docentText">Welcome…</div>
+    </div>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div class="modal" id="helpModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-title">How to tour</div>
+      <div class="modal-body">
+        <ul>
+          <li>Tap <b>VALIDATE TICKET</b> to enter.</li>
+          <li>Each room reveals exhibits <b>slowly, one by one</b>.</li>
+          <li><b>Next Room</b> appears only after the room finishes revealing.</li>
+          <li>Between rooms you’ll <b>walk the hallway</b> into the next door.</li>
+          <li>Tap any photo to read its placard (tour pauses).</li>
+          <li>Videos autoplay muted; tap <b>Enable Sound</b> in cinema rooms.</li>
+        </ul>
+      </div>
+      <button class="btn gold" id="closeHelp" type="button">Got it</button>
+    </div>
+  </div>
+
+  <!-- PHOTO / PLACARD MODAL -->
+  <div class="modal" id="photoModal" aria-hidden="true">
+    <div class="modal-card wide">
+      <div class="modal-title">Placard</div>
+      <div class="photo-modal-grid">
+        <img id="modalImg" alt="Selected memory"/>
+        <div class="placard">
+          <div>
+            <div class="placard-kicker" id="placardKicker">Exhibit</div>
+            <div class="placard-text" id="placardText"></div>
+            <div class="placard-note">Close to continue the tour.</div>
+          </div>
+          <button class="btn gold" id="closePhoto" type="button">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOOR OVERLAY -->
+  <div class="doorOverlay" id="doorOverlay" aria-hidden="true">
+    <div class="door left">
+      <div class="doorPanel"></div>
+      <div class="doorHandle"></div>
+      <div class="doorLatch"></div>
+    </div>
+
+    <div class="door right">
+      <div class="doorPanel"></div>
+      <div class="doorHandle"></div>
+      <div class="doorLatch"></div>
+    </div>
+
+    <div class="doorCenter">
+      <div class="doorLabel" id="doorLabel">Entering…</div>
+      <div class="doorSub" id="doorSub">Please wait</div>
+    </div>
+  </div>
+
+  <!-- HALLWAY OVERLAY -->
+  <div class="hallOverlay" id="hallOverlay" aria-hidden="true">
+    <div class="hall">
+      <div class="hallCeilingGlow"></div>
+
+      <div class="hallPerspective" id="hallPerspective">
+        <div class="hallWalls"></div>
+        <div class="hallFloor"></div>
+
+        <div class="hallFrames">
+          <div class="hallFrame f1"></div>
+          <div class="hallFrame f2"></div>
+          <div class="hallFrame f3"></div>
+          <div class="hallFrame f4"></div>
+        </div>
+
+        <div class="hallEndDoor" id="hallEndDoor">
+          <div class="hallDoorPanel"></div>
+          <div class="hallDoorHandle"></div>
+        </div>
+
+        <div class="hallText">
+          <div class="hallTitle" id="hallTitle">Walking to the next room</div>
+          <div class="hallHint" id="hallHint">Please keep walking…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="intro" id="intro" aria-label="Ticket Lobby">
+    <div class="intro-inner">
+      <div class="intro-kicker">ADMIT ONE • PRIVATE ENTRY</div>
+      <h1 class="intro-title">A Museum Built From Us</h1>
+      <div class="intro-divider"></div>
+
+      <div class="intro-grid">
+        <div class="ticket glass" id="ticket">
+          <div class="ticket-top">
+            <div class="ticket-mini">OPENING NIGHT</div>
+            <div class="ticket-name">Museum of Our Love</div>
+            <div class="ticket-sub">Guest of Honor</div>
+          </div>
+
+          <div class="ticket-mid">
+            <div class="ticket-qr" aria-hidden="true"></div>
+            <div class="ticket-date">FEB 19</div>
+          </div>
+
+          <div class="ticket-bot">
+            <button class="sealBtn" id="validateBtn" type="button">VALIDATE TICKET ✦</button>
+            <div class="sealHint" id="sealHint">Tap to begin your private tour.</div>
+          </div>
+
+          <div class="ticket-stamp" id="ticketStamp">VALIDATED</div>
+          <div class="ticket-sheen" aria-hidden="true"></div>
+        </div>
+
+        <div class="intro-note glass">
+          <div class="note-title">A tour that isn’t rushed.</div>
+          <div class="note-text">
+            Every room is a memory.
+            <br/>Every door is a year.
+            <br/><br/>
+            And this museum has one promise:
+            <b>it will keep growing with us</b>.
+          </div>
+          <div class="note-tip">Tip: tap photos to read their placards.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE -->
+  <main class="stage" id="stage" aria-hidden="true">
+    <div class="tourHud">
+      <div class="progress">
+        <div class="bar"><div class="fill" id="progressFill"></div></div>
+        <div class="label" id="progressLabel">Room</div>
+      </div>
+      <div class="roomBadge" id="roomBadge">YEAR 1</div>
+    </div>
+
+    <div class="rooms" id="rooms">
+
+      <!-- ROOM 0: YEAR 1 (01-03) -->
+      <section class="room active" data-room="0" data-theme="y1"
+        data-badge="YEAR 1" data-label="Year 1 • Where it began"
+        data-docent="On your left: the first sparks. The first ‘this feels different.’ Slow down — this is where everything begins.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">YEAR 1</div>
+            <h2>Where it began</h2>
+            <div class="divider"></div>
+            <p class="sub">The first moments that quietly changed everything.</p>
+          </div>
+
+          <div class="gallery grid3">
+            <figure class="frame reveal-item" data-exhibit="Exhibit A"
+              data-placard="First kiss photooo!! I think also first window at my place afer we started dating. Magical since the first one (More cheek kisses pls)"
+              data-src-base="01">
+              <img class="lazyPhoto" alt="Year 1 - 01"/>
+              <figcaption>Exhibit A • First Kiss</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit B"
+              data-placard="First time my sweet sugran cooked for me, guess what it was?"
+              data-src-base="02">
+              <img class="lazyPhoto" alt="Year 1 - 02"/>
+              <figcaption>Exhibit B • Best Chef</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit C"
+              data-placard="First time saw you in glasses and discovered a whole new hot smart and cute version of you."
+              data-src-base="03">
+              <img class="lazyPhoto" alt="Year 1 - 03"/>
+              <figcaption>Exhibit C • CUTEEEEE</figcaption>
+            </figure>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button" disabled>← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 1: YEAR 2 (04-06) -->
+      <section class="room" data-room="1" data-theme="y2"
+        data-badge="YEAR 2" data-label="Year 2 • Us becoming real"
+        data-docent="Ahead: Year 2 — where ‘us’ stopped being a question and started being a home.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">YEAR 2</div>
+            <h2>Us becoming real</h2>
+            <div class="divider"></div>
+            <p class="sub">The year we started building something steady.</p>
+          </div>
+
+          <div class="gallery grid3">
+            <figure class="frame reveal-item" data-exhibit="Exhibit D"
+              data-placard="MERIII KAATILANA MODELLLLLLL AS ALWAYSSSSS"
+              data-src-base="04">
+              <img class="lazyPhoto" alt="Year 2 - 04"/>
+              <figcaption>Exhibit D • Hottie in the US</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit E"
+              data-placard="First Ganpati together finallyyy, the previous one was very stressful lol"
+              data-src-base="05">
+              <img class="lazyPhoto" alt="Year 2 - 05"/>
+              <figcaption>Exhibit E • A before/after snap?</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit F"
+              data-placard="Full trip if there was something more beautiful that Colorado then vo obviously aap hi the"
+              data-src-base="06">
+              <img class="lazyPhoto" alt="Year 2 - 06"/>
+              <figcaption>Exhibit F • You are nature</figcaption>
+            </figure>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 2: YEAR 3 (07-08) -->
+      <section class="room" data-room="2" data-theme="y3"
+        data-badge="YEAR 3" data-label="Year 3 • Strong + soft"
+        data-docent="This is Year 3 — the love that learned how to be strong and gentle at the same time.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">YEAR 3</div>
+            <h2>Strong + soft</h2>
+            <div class="divider"></div>
+            <p class="sub">The quiet confidence of staying, choosing, growing.</p>
+          </div>
+
+          <div class="gallery grid2">
+            <figure class="frame reveal-item" data-exhibit="Exhibit G"
+              data-placard="Yeh toh practice thi..."
+              data-src-base="07">
+              <img class="lazyPhoto" alt="Year 3 - 07"/>
+              <figcaption>Exhibit G • Min. $10k💍</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit H"
+              data-placard="Wtf is that rock behind the only wonder of the world?"
+              data-src-base="08">
+              <img class="lazyPhoto" alt="Year 3 - 08"/>
+              <figcaption>Exhibit H • Wondering wonder</figcaption>
+            </figure>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 3: CINEMA 01 -->
+      <section class="room" data-room="3" data-theme="cinema"
+        data-badge="CINEMA" data-label="Cinema • Year 3 reel"
+        data-docent="Cinema room. Let it play. If you want sound, tap ‘Enable Sound’ — just like a private screening.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">CINEMA</div>
+            <h2>Year 3 reel</h2>
+            <div class="divider"></div>
+            <p class="sub">The day my heart experienced the fact it is with a celebrity, I mean even that ch ch ch was mind blowing</p>
+          </div>
+
+          <div class="cinema glass reveal-item">
+            <div class="screenTop">
+              <div class="screenTitle">Projection • Reel 01</div>
+              <div class="screenNote">Autoplay muted (works on iPhone)</div>
+            </div>
+
+            <video class="vid" autoplay muted loop playsinline preload="auto">
+              <source src="assets/videos/01.MOV" type="video/mp4"/>
+            </video>
+
+            <button class="soundBtn" type="button" data-sound-btn>🔊 Enable Sound</button>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 4: YEAR 4 (09-10) -->
+      <section class="room" data-room="4" data-theme="y4"
+        data-badge="YEAR 4" data-label="Year 4 • Distance didn’t win"
+        data-docent="Year 4 — the chapter where distance tried… and failed. Because we kept choosing each other.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">YEAR 4</div>
+            <h2>Distance didn’t win</h2>
+            <div class="divider"></div>
+            <p class="sub">We stayed intentional. We stayed warm.</p>
+          </div>
+
+          <div class="gallery grid2">
+            <figure class="frame reveal-item" data-exhibit="Exhibit I"
+              data-placard="Good trip with Vishakha"
+              data-src-base="09">
+              <img class="lazyPhoto" alt="Year 4 - 09"/>
+              <figcaption>Exhibit I • Trip by yours truly😎</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit J"
+              data-placard="The most beautiful on any birthday"
+              data-src-base="10">
+              <img class="lazyPhoto" alt="Year 4 - 10"/>
+              <figcaption>Exhibit J • No words for that smile</figcaption>
+            </figure>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 5: CINEMA 02 -->
+      <section class="room" data-room="5" data-theme="cinema"
+        data-badge="CINEMA" data-label="Cinema • Year 4 reel"
+        data-docent="Another screening. Another year. Another proof: we always come back to each other.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">CINEMA</div>
+            <h2>Year 4 reel</h2>
+            <div class="divider"></div>
+            <p class="sub">Someone hire this woman for reviews, I mean who can look so beautiful even in a review video</p>
+          </div>
+
+          <div class="cinema glass reveal-item">
+            <div class="screenTop">
+              <div class="screenTitle">Projection • Reel 02</div>
+              <div class="screenNote">Autoplay muted • Tap sound if you want</div>
+            </div>
+
+            <video class="vid" autoplay muted loop playsinline preload="auto">
+              <source src="assets/videos/02.MOV" type="video/mp4"/>
+            </video>
+
+            <button class="soundBtn" type="button" data-sound-btn>🔊 Enable Sound</button>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 6: YEAR 5 (11-12) -->
+      <section class="room" data-room="6" data-theme="y5"
+        data-badge="YEAR 5" data-label="Year 5 • Still butterflies"
+        data-docent="Year 5 — and somehow, it still feels like the first time. Still butterflies. Still you.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">YEAR 5</div>
+            <h2>Still butterflies</h2>
+            <div class="divider"></div>
+            <p class="sub">Five years… and my favorite place is still next to you.</p>
+          </div>
+
+          <div class="gallery grid2">
+            <figure class="frame reveal-item" data-exhibit="Exhibit K"
+              data-placard="Honestly for me this was the second best trip. You proved your luck again at Vegas. Sometimes might take some time but always comes around. "
+              data-src-base="11">
+              <img class="lazyPhoto" alt="Year 5 - 11"/>
+              <figcaption>Exhibit K • More and more and more trips to come</figcaption>
+            </figure>
+
+            <figure class="frame reveal-item" data-exhibit="Exhibit L"
+              data-placard="The definition of perfection in every way possible. My queeeeen. Forever at your service your highness💖💖💖"
+              data-src-base="12">
+              <img class="lazyPhoto" alt="Year 5 - 12"/>
+              <figcaption>Exhibit L • No one can be as lucky as I am</figcaption>
+            </figure>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Next Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 7: CINEMA 03 -->
+      <section class="room" data-room="7" data-theme="cinema"
+        data-badge="CINEMA" data-label="Cinema • Year 5 reel"
+        data-docent="Final screening. A preview of forever. (And yes — more rooms are coming.)">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">CINEMA</div>
+            <h2>Year 5 reel</h2>
+            <div class="divider"></div>
+            <p class="sub">Te Bird ahe te birdddd😂😂😂😂</p>
+          </div>
+
+          <div class="cinema glass reveal-item">
+            <div class="screenTop">
+              <div class="screenTitle">Projection • Reel 03</div>
+              <div class="screenNote">Autoplay muted • Tap sound if you want</div>
+            </div>
+
+            <video class="vid" autoplay muted loop playsinline preload="auto">
+              <source src="assets/videos/03.MOV" type="video/mp4"/>
+            </video>
+
+            <button class="soundBtn" type="button" data-sound-btn>🔊 Enable Sound</button>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" data-next type="button">Final Room →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ROOM 8: FINALE -->
+      <section class="room" data-room="8" data-theme="final"
+        data-badge="ENDLESS" data-label="Endless • More rooms to come"
+        data-docent="Final room. Not an ending — a promise: this museum keeps growing with us.">
+        <div class="roomInner">
+          <div class="roomHeader">
+            <div class="kicker">THE END • AND ALSO NOT</div>
+            <h2>The museum keeps growing</h2>
+            <div class="divider"></div>
+            <p class="sub">Because we’re not done making memories.</p>
+          </div>
+
+          <div class="finalGrid">
+            <div class="finalCard glass reveal-item">
+              <div class="finalTitle">Certificate of Eternal Admission</div>
+              <div class="finalText">
+                This certifies that <b>you</b> have permanent access to:
+                <br/>my heart, my time, my softest love,
+                <br/>and every future room we build together.
+              </div>
+
+              <div class="finalLine"></div>
+
+              <div class="guestbook">
+                <div class="guestbookLabel">Sign the guestbook</div>
+                <input id="guestName" class="guestInput" type="text" placeholder="Type your name (or nickname)"/>
+                <button class="btn rose" id="signBtn" type="button">Sign + Seal ✦</button>
+                <div class="signed" id="signedMsg"></div>
+              </div>
+
+              <div class="finalActions">
+                <button class="btn gold" id="fireworksBtn" type="button">Celebrate 🎆</button>
+                <button class="btn ghost" id="restartBtn" type="button">Restart Tour ↺</button>
+              </div>
+            </div>
+
+            <div class="futureCard glass reveal-item">
+              <div class="futureTitle">Next rooms coming…</div>
+              <div class="futureText">
+                This museum is alive.
+                <br/>It grows as we grow.
+                <br/><br/>
+                Future exhibits:
+                <div class="bullets">
+                  <div>• new trips</div>
+                  <div>• reunions</div>
+                  <div>• new “firsts”</div>
+                  <div>• anniversaries</div>
+                </div>
+              </div>
+              <div class="futureFooter">
+                <span class="tiny">Endless more — forever.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="navRow">
+            <button class="btn ghost" data-prev type="button">← Previous</button>
+            <button class="btn gold nextBtn" id="exitBtn" type="button">Close the museum doors ✨</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="script.js?v=final-2"></script>
+</body>
+</html>
